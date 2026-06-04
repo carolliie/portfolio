@@ -8,7 +8,7 @@ const PROFILE = {
   domain: "carollie.dev",
   tagline: "construindo web apps escaláveis, plataformas SaaS, integrações & automações.",
   email: "anacvieira1415@gmail.com",
-  phone: "(93) 99124-9533",
+  phone: "+55 (93) 99124-9533",
 };
 
 const LINKS = [
@@ -20,7 +20,7 @@ const LINKS = [
 
 const STACK = [
   "TypeScript", "JavaScript", "React", "Next.js", "Node.js",
-  "Java", "Spring Boot", "PostgreSQL", "REST APIs", "Git", "Linux", "Kanban",
+  "Java", "Spring Boot", "PostgreSQL", "REST APIs", "Git", "Linux", "Docker", "Kanban",
 ];
 
 const EXPERIENCE = [
@@ -40,9 +40,23 @@ const EXPERIENCE = [
     tags: ["ISP", "ERP", "CRM", "Automação"],
   },
   {
+    id: "lugenius",
+    company: "Lugenius",
+    role: "Estagiária — Soluções em Tecnologia",
+    period: "mar/2024 — mar/2026",
+    summary: "Interfaces web responsivas e interativas, foco em UI/UX.",
+    bullets: [
+      "Desenvolvimento de interfaces web responsivas e interativas para uma melhor experiência do usuário.",
+      "Aplicação de boas práticas de UI/UX para otimizar navegação e usabilidade.",
+      "Implementação de funcionalidades e consumo de APIs RESTful, integrando sistemas.",
+      "HTML, CSS, JavaScript, WordPress, React e Git em equipes multidisciplinares.",
+    ],
+    tags: ["React", "WordPress", "APIs", "UI/UX", "Git"],
+  },
+  {
     id: "ufopa",
     company: "UFOPA",
-    role: "Voluntária — projeto universitário",
+    role: "Voluntária — Amazônibus (PIAPE)",
     period: "fev/2025 — dez/2025",
     summary: "App de gestão de transporte e rastreamento de veículos.",
     bullets: [
@@ -52,33 +66,42 @@ const EXPERIENCE = [
     ],
     tags: ["Mobilidade", "Tracking", "Prototipagem"],
   },
-  {
-    id: "lugenius",
-    company: "Lugenius",
-    role: "Estagiária — Soluções em Tecnologia",
-    period: "mar/2024 — dez/2024",
-    summary: "Interfaces web responsivas e interativas, foco em UI/UX.",
-    bullets: [
-      "Desenvolvimento de interfaces web responsivas e interativas para uma melhor experiência do usuário.",
-      "Aplicação de boas práticas de UI/UX para otimizar navegação e usabilidade.",
-      "Implementação de funcionalidades e consumo de APIs RESTful, integrando sistemas.",
-      "HTML, CSS, JavaScript, WordPress, React e Git em equipes multidisciplinares.",
-    ],
-    tags: ["UI/UX", "React", "WordPress", "APIs"],
-  },
 ];
 
 const EDUCATION = {
   school: "Universidade Federal do Oeste do Pará — UFOPA",
   degree: "Bacharelado em Ciência da Computação",
   period: "2023 — atual",
-  focus: "ênfase em Engenharia de Software",
+  focus: "Arquitetura de computadores, Algoritmos, Engenharia de Software e IA",
+};
+
+const STACK_ICONS = {
+  TypeScript: "typescript",
+  JavaScript: "javascript",
+  React: "react",
+  "Next.js": "nextdotjs",
+  "Node.js": "nodedotjs",
+  Java: "openjdk",
+  "Spring Boot": "springboot",
+  PostgreSQL: "postgresql",
+  "REST APIs": "swagger",
+  Git: "git",
+  Linux: "linux",
+  Kanban: "trello",
+  Stripe: "stripe",
+  Zapier: "zapier",
+  Grafana: "grafana",
+  "Google Cloud": "googlecloud",
+  "React Native": "reactnative",
+  Flutter: "flutter",
+  Docker: "docker",
 };
 
 const PROJECTS = [
   {
     id: "agnelle",
     name: "Agnelle",
+    image: "./screenshots/agnelle.webp",
     kind: "e-commerce",
     seed: 1.2,
     year: "2025",
@@ -94,13 +117,15 @@ const PROJECTS = [
     ],
     stack: ["Next.js", "Node.js", "PostgreSQL", "Stripe", "TypeScript"],
     status: "em produção",
+    url: null,
   },
   {
     id: "maisindica",
     name: "Mais Indica",
+    image: "./screenshots/maisindica.webp",
     kind: "saas · recomendação",
     seed: 3.7,
-    year: "2025",
+    year: "2026",
     tagline: "SaaS de indicações e recompensas.",
     overview:
       "Plataforma de referral marketing: empresas criam programas de indicação, acompanham conversões em tempo real e distribuem recompensas automaticamente. Pensada para escalar e reduzir trabalho manual.",
@@ -111,15 +136,17 @@ const PROJECTS = [
       "Distribuição automática de recompensas",
       "Dashboards de performance",
     ],
-    stack: ["React", "Node.js", "PostgreSQL", "Automations"],
+    stack: ["React", "Node.js", "PostgreSQL", "Zapier"],
     status: "ativo",
+    url: null,
   },
   {
     id: "monitoracx",
     name: "MonitoraCX",
+    image: "./screenshots/monitoracx.webp",
     kind: "saas · analytics",
     seed: 6.3,
-    year: "2024",
+    year: "2026",
     tagline: "Análise de atendimento e métricas de CX.",
     overview:
       "SaaS que coleta e analisa interações de atendimento, transformando dados brutos em métricas e insights de experiência do cliente para decisões orientadas a dados.",
@@ -130,15 +157,17 @@ const PROJECTS = [
       "Painéis e visualizações de insights",
       "Base para decisões data-driven",
     ],
-    stack: ["TypeScript", "React", "Node.js", "Dashboards"],
+    stack: ["TypeScript", "React", "Node.js", "Grafana"],
     status: "ativo",
+    url: null,
   },
   {
     id: "cloudpet",
     name: "cloudpet",
+    image: "./screenshots/cloudpet.webp",
     kind: "app · gestão",
     seed: 8.9,
-    year: "2024",
+    year: "2023",
     tagline: "App e sistema de gestão de cuidado animal.",
     overview:
       "Aplicativo e sistema para gerenciar o cuidado de pets — histórico, lembretes e acompanhamento de saúde, com sincronização em nuvem entre o app e o painel de gestão.",
@@ -149,9 +178,10 @@ const PROJECTS = [
       "Sincronização app ↔ painel via nuvem",
       "Gestão centralizada de informações",
     ],
-    stack: ["React", "Node.js", "Cloud", "Mobile"],
+    stack: ["Flutter", "Node.js", "PostgreSQL", "Docker"],
     status: "em desenvolvimento",
+    url: null,
   },
 ];
 
-Object.assign(window, { PROFILE, LINKS, STACK, EXPERIENCE, EDUCATION, PROJECTS });
+Object.assign(window, { PROFILE, LINKS, STACK, EXPERIENCE, EDUCATION, PROJECTS, STACK_ICONS });

@@ -1,4 +1,4 @@
-/* global React, PROFILE, LINKS, STACK, EXPERIENCE, EDUCATION, PROJECTS,
+/* global React, PROFILE, LINKS, STACK, EXPERIENCE, EDUCATION, PROJECTS, STACK_ICONS,
    SocialRow, Glitch, Dither, DitherImage, Typewriter, ClockHUD, Magnetic, Icon */
 const { useState, useEffect, useRef } = React;
 
@@ -244,26 +244,25 @@ function About() {
               ))}
             </div>
           </div>
+
+          <div className="about__actions reveal">
+            <Magnetic>
+              <a
+                className="btn btn--ghost crt-type"
+                href="https://drive.google.com/file/d/1zFN1WcSLXx4x-NIuIzhEVdosvo7telDt/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="link"
+              >
+                ver currículo →
+              </a>
+            </Magnetic>
+          </div>
         </div>
       </div>
     </section>
   );
 }
-
-const STACK_ICONS = {
-  TypeScript: "typescript",
-  JavaScript: "javascript",
-  React: "react",
-  "Next.js": "nextdotjs",
-  "Node.js": "nodedotjs",
-  Java: "openjdk",
-  "Spring Boot": "springboot",
-  PostgreSQL: "postgresql",
-  "REST APIs": "swagger",
-  Git: "git",
-  Linux: "linux",
-  Kanban: "trello",
-};
 
 function AboutStackOnly() {
   return (
@@ -371,7 +370,10 @@ function ProjectCard({ p, onOpen }) {
       data-cursor="view"
     >
       <div className="card__cover">
-        <Dither mode="noise" seed={p.seed} cols={120} rows={84} />
+        {p.image
+          ? <img src={p.image} alt={p.name} className="card__img" />
+          : <Dither mode="noise" seed={p.seed} cols={120} rows={84} />
+        }
         <span className="card__kind crt-type">{p.kind}</span>
         <span className="card__year crt-type">{p.year}</span>
       </div>
@@ -458,7 +460,7 @@ function Footer({ onNav }) {
         onClick={() => onNav("inicio")}
         data-cursor="link"
       >
-        voltar ao topo ↑
+        ↑
       </button>
       <span className="muted">present day. present time.</span>
     </footer>
