@@ -5,7 +5,6 @@ const PROFILE = {
   fullName: "Ana Caroline Monteiro Vieira Pinto",
   role: "Desenvolvedora de Software",
   location: "Santarém · Pará · BR",
-  domain: "carollie.dev",
   tagline: "construindo web apps escaláveis, plataformas SaaS, integrações & automações.",
   email: "anacvieira1415@gmail.com",
   phone: "+55 (93) 99124-9533",

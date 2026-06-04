@@ -103,10 +103,10 @@ function Hero() {
           </div>
           <h1 className="hero__name">
             <Glitch tag="span" className="hero__nameline">
-              software
+              No matter where you are,
             </Glitch>
             <Glitch tag="span" className="hero__nameline hero__nameline--2">
-              is my art
+              everyone is always connected.
             </Glitch>
           </h1>
           <p className="hero__role crt-type reveal">
@@ -282,7 +282,7 @@ function AboutStackOnly() {
           </div>
 
           <div className="stack reveal">
-            <span className="stack__lbl crt-type">stack</span>
+            <span className="stack__lbl crt-type">stacks</span>
             <div className="stack__chips">
               {STACK.map((s) => (
                 <span className="chip techchip" key={s} title={s} aria-label={s}>
