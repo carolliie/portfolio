@@ -466,11 +466,10 @@
         line-height: 0.82;
         margin-bottom: 18px;
         text-transform: uppercase;
-        max-width: min(1080px, 72vw);
       }
       .hero__nameline {
         display: block;
-        font-size: clamp(70px, 13.2vw, 190px);
+        font-size: clamp(70px, 13.2vw, 80px);
         color: var(--ink);
       }
       .hero__nameline--2 {
@@ -484,10 +483,10 @@
         text-transform: uppercase;
       }
       .hero__role::before {
-        content: "success is your reality";
-        font-size: clamp(22px, 2.8vw, 36px);
+        content: "welcome to my page!";
+        font-size: clamp(22px, 2.8vw, 26px);
         font-family: "Helvetica", Helvetica, sans-serif;
-        font-weight: 700;
+        font-weight: 400;
       }
       .hero__role .tw-caret {
         display: none;
@@ -1659,6 +1658,15 @@
           padding-top: 92px;
           box-shadow: none;
         }
+        .hero__left {
+          text-align: center;
+          align-items: center;
+        }
+        .hero__nameline {
+          display: block;
+          text-align: center;
+          width: 100%;
+        }
         .hero__miniNav {
           flex-wrap: wrap;
           justify-content: center;
@@ -1768,27 +1776,37 @@
         }
         .hero {
           padding-top: 88px;
+          overflow-x: hidden;
         }
         .hero__grid {
           padding: 96px 18px 34px;
         }
         .hero__left {
           min-height: auto;
+          text-align: center;
+          align-items: center;
         }
         .hero__name {
           max-width: 100%;
           width: 100%;
           line-height: 0.86;
+          text-align: center;
         }
         .hero__nameline {
-          font-size: clamp(42px, 16.5vw, 72px);
+          display: block;
+          text-align: center;
+          width: 100%;
+          white-space: normal;
+          word-break: break-word;
+          font-size: clamp(38px, 14vw, 64px);
         }
         .hero__nameline--2 {
-          width: min-content;
+          width: 100%;
           margin: 0 auto;
           white-space: normal;
-          font-size: clamp(48px, 16vw, 68px);
-          line-height: 0.82;
+          word-break: break-word;
+          font-size: clamp(38px, 14vw, 64px);
+          line-height: 0.86;
         }
         .hero__role::before {
           font-size: 20px;
