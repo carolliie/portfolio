@@ -9,6 +9,7 @@ function Cursor() {
   const pos = useRef({ x: -100, y: -100 });
   const rpos = useRef({ x: -100, y: -100 });
   const [variant, setVariant] = useState("");
+  const lastV = useRef("");
 
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -16,8 +17,9 @@ function Cursor() {
     const move = (e) => {
       pos.current = { x: e.clientX, y: e.clientY };
       if (dot.current) dot.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-      const t = e.target.closest("[data-cursor]");
-      setVariant(t ? t.getAttribute("data-cursor") : "");
+      const t = e.target.closest && e.target.closest("[data-cursor]");
+      const v = t ? t.getAttribute("data-cursor") : "";
+      if (v !== lastV.current) { lastV.current = v; setVariant(v); }
     };
     let raf;
     const loop = () => {
@@ -27,7 +29,7 @@ function Cursor() {
       raf = requestAnimationFrame(loop);
     };
     loop();
-    window.addEventListener("mousemove", move);
+    window.addEventListener("mousemove", move, { passive: true });
     return () => { window.removeEventListener("mousemove", move); cancelAnimationFrame(raf); document.body.classList.remove("has-cursor"); };
   }, []);
 
@@ -57,13 +59,18 @@ function App() {
   const [active, setActive] = useState("inicio");
   const pendingScroll = useRef(null);
 
+  // spotlight segue o mouse via transform (sem repintar a página)
   useEffect(() => {
-    const onMove = (e) => {
-      document.documentElement.style.setProperty("--mx", `${e.clientX}px`);
-      document.documentElement.style.setProperty("--my", `${e.clientY}px`);
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    let raf = 0, x = 0, y = 0;
+    const apply = () => {
+      raf = 0;
+      const el = document.querySelector(".spot");
+      if (el) el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     };
+    const onMove = (e) => { x = e.clientX; y = e.clientY; if (!raf) raf = requestAnimationFrame(apply); };
     window.addEventListener("mousemove", onMove, { passive: true });
-    return () => window.removeEventListener("mousemove", onMove);
+    return () => { window.removeEventListener("mousemove", onMove); if (raf) cancelAnimationFrame(raf); };
   }, []);
 
   useEffect(() => {
@@ -130,6 +137,7 @@ function App() {
         <ProjectPage id={route.id} onNav={onNav} onOpen={onOpen} />
       ) : (
         <main className="app">
+          <div className="spot" aria-hidden="true" />
           <Hero />
           <About />
           <Experience />

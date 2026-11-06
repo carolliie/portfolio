@@ -45,8 +45,6 @@
       }
       /* ============ COLOR TOKENS ============ */
       :root {
-        --mx: 50vw;
-        --my: 50vh;
         --bg: #0b0608;
         --bg2: #120a0e;
         --panel: #190d12;
@@ -245,7 +243,6 @@
         inset: 0;
         z-index: 8000;
         pointer-events: none;
-        mix-blend-mode: multiply;
         opacity: 0.25;
       }
       .crt::before {
@@ -257,14 +254,6 @@
           rgba(255, 255, 255, 0.03) 0 1px,
           transparent 1px 3px
         );
-      }
-      .crt::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        mix-blend-mode: multiply;
-        background: transparent;
-        animation: flicker 7s infinite;
       }
       @keyframes flicker {
         0%,
@@ -625,11 +614,6 @@
         position: relative;
         background:
           radial-gradient(
-            circle at var(--mx) var(--my),
-            rgba(255, 255, 255, 0.2) 0,
-            transparent 210px
-          ),
-          radial-gradient(
             90vw 70vw at 8% 12%,
             rgba(255, 143, 180, 0.35),
             transparent 58%
@@ -649,13 +633,7 @@
         right: 0;
         top: 0;
         height: 170px;
-        background:
-          radial-gradient(
-            circle at var(--mx) var(--my),
-            rgba(255, 255, 255, 0.18) 0,
-            transparent 210px
-          ),
-          linear-gradient(135deg, var(--accent), var(--accent-deep));
+        background: linear-gradient(135deg, var(--accent), var(--accent-deep));
         clip-path: polygon(
           0 24%,
           5% 34%,
@@ -685,16 +663,25 @@
           linear-gradient(var(--grid) 1px, transparent 1px),
           linear-gradient(90deg, var(--grid) 1px, transparent 1px);
         background-size: 22px 22px;
-        mask-image: radial-gradient(
-          circle at var(--mx) var(--my),
-          black 0 360px,
-          rgba(0, 0, 0, 0.38) 560px,
-          transparent 900px
-        );
-        opacity: 0.55;
+        opacity: 0.3;
         pointer-events: none;
         z-index: 0;
       }
+      /* Spotlight: camada fixa pequena movida por transform (compositor only) */
+      .app > .spot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 900px;
+        height: 900px;
+        margin: -450px 0 0 -450px;
+        z-index: 0;
+        pointer-events: none;
+        will-change: transform;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0, transparent 210px);
+        transform: translate3d(-9999px, -9999px, 0);
+      }
+
       .app > * {
         position: relative;
         z-index: 1;
@@ -783,7 +770,6 @@
         border: 2px solid var(--ink);
         margin: 54px auto;
         box-shadow: 12px 12px 0 var(--accent-deep);
-        backdrop-filter: blur(10px);
       }
       .app > .sec:nth-of-type(1) {
         width: min(1260px, 94vw);
@@ -1910,13 +1896,13 @@
     <div id="root"></div>
 
     <script
-      src="https://unpkg.com/react@18.3.1/umd/react.development.js"
-      integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+      src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"
+      integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z"
       crossorigin="anonymous"
     ></script>
     <script
-      src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
-      integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+      src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"
+      integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1"
       crossorigin="anonymous"
     ></script>
     <script
