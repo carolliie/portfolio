@@ -454,7 +454,7 @@
         font-weight: 700;
         line-height: 0.82;
         margin-bottom: 18px;
-        text-transform: uppercase;
+        text-transform: lowercase;
       }
       .hero__nameline {
         display: block;
@@ -474,7 +474,7 @@
       .hero__role::before {
         content: "welcome to my page!";
         font-size: clamp(22px, 2.8vw, 26px);
-        font-family: "Helvetica", Helvetica, sans-serif;
+        font-family: "Space Mono", monospace;
         font-weight: 400;
       }
       .hero__role .tw-caret {
@@ -1111,7 +1111,7 @@
         color: var(--accent);
         line-height: 1;
         transition:
-          transform 0.28s ease,
+          transform 0.3s cubic-bezier(0.32, 0.72, 0, 1),
           color 0.2s ease;
         transform-origin: center;
       }
@@ -1138,8 +1138,21 @@
         margin-top: 8px;
       }
       .exp__detail {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      }
+      .exp.is-open .exp__detail {
+        grid-template-rows: 1fr;
+      }
+      .exp__detail > .exp__detail-in {
         overflow: hidden;
-        transition: max-height 0.45s ease;
+        min-height: 0;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .exp__detail {
+          transition: none;
+        }
       }
       .exp__bullets {
         list-style: none;

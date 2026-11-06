@@ -323,21 +323,20 @@ function ExpItem({ x, i }) {
           <span className="exp__toggle crt-type">{open ? "−" : "+"}</span>
         </button>
         <p className="exp__summary">{x.summary}</p>
-        <div
-          className="exp__detail"
-          style={{ maxHeight: open ? "460px" : "0px" }}
-        >
-          <ul className="exp__bullets">
-            {x.bullets.map((b, k) => (
-              <li key={k}>{b}</li>
-            ))}
-          </ul>
-          <div className="exp__tags">
-            {x.tags.map((t) => (
-              <span className="tag crt-type" key={t}>
-                {t}
-              </span>
-            ))}
+        <div className="exp__detail">
+          <div className="exp__detail-in">
+            <ul className="exp__bullets">
+              {x.bullets.map((b, k) => (
+                <li key={k}>{b}</li>
+              ))}
+            </ul>
+            <div className="exp__tags">
+              {x.tags.map((t) => (
+                <span className="tag crt-type" key={t}>
+                  {t}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
