@@ -204,19 +204,27 @@ function About() {
         <div className="about__body">
           <div className="about__text reveal">
             <p>
-              Graduanda em <strong>Ciência da Computação</strong> pela UFOPA,
-              com ênfase em <em>Engenharia de Software</em>. Apaixonada por
-              construir aplicações web escaláveis, plataformas <em>SaaS</em>,
-              integrações e soluções de automação.
+              Sou <strong>Engenheira de Software</strong> com +2 anos
+              de experiência e graduanda em
+              <strong> Ciência da Computação</strong> pela Universidade
+              Federal do Oeste do Pará. Atuo no desenvolvimento de aplicações
+              web e mobile, plataformas <em>SaaS</em> e soluções escaláveis,
+              com foco em arquitetura de sistemas, automação e
+              inteligência artificial.
             </p>
             <p>
-              Hoje desenvolvo sistemas <strong>ISP, ERP e CRM</strong> para
-              provedores de internet na <strong>Zum Telecom</strong>. Antes,
-              atuei em projetos universitários e como estagiária criando
-              interfaces web responsivas com foco em UI/UX e APIs RESTful.
+              Atualmente, trabalho como freelancer com manutenção, construção de sistemas e contribuo para o desenvolvimento do
+              <strong> Antichurn</strong>, uma plataforma SaaS de inteligência
+              de dados e retenção de clientes para provedores de internet,
+              que monitora mais de <strong>23 mil clientes</strong> em
+              diferentes bases ativas. Ao longo da minha trajetória,
+              contribuí para mais de <strong>20 projetos</strong>,
+              envolvendo integrações, automação e soluções digitais.
             </p>
             <p className="muted">
-              Sempre aberta a aprender, colaborar e encarar novos desafios.
+              Movida por desafios, criatividade e aprendizado contínuo.
+              Gosto de transformar problemas complexos em soluções
+              eficientes, escaláveis e com impacto real.
             </p>
           </div>
 
@@ -249,7 +257,7 @@ function About() {
             <Magnetic>
               <a
                 className="btn btn--ghost crt-type"
-                href="https://drive.google.com/file/d/1zFN1WcSLXx4x-NIuIzhEVdosvo7telDt/view?usp=sharing"
+                href="https://carollie.netlify.app/uploads/CURRICULO_ANA_CAROLINE_VIEIRA.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor="link"
