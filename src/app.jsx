@@ -1,8 +1,12 @@
-/* global React, ReactDOM, Boot, Nav, Hero, About, Experience, Projects, Contact, Footer,
-   ProjectPage, useReveal, NAV */
-const { useState, useEffect, useRef, useCallback } = React;
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Boot, Nav, Hero, About, Experience, Projects, Contact, Footer, SkipLink, NAV,
+} from "./sections.jsx";
+import { ProjectPage, NotFound } from "./projectpage.jsx";
+import { RecruiterPage } from "./recruiter.jsx";
+import { useReveal } from "./ui.jsx";
 
-/* ---------- Custom pixel cursor ---------- */
+/* ---------- Custom pixel cursor (apenas ponteiros finos) ---------- */
 function Cursor() {
   const dot = useRef(null);
   const ring = useRef(null);
@@ -13,6 +17,7 @@ function Cursor() {
 
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     document.body.classList.add("has-cursor");
     const move = (e) => {
       pos.current = { x: e.clientX, y: e.clientY };
@@ -45,23 +50,26 @@ function Cursor() {
   );
 }
 
-/* ---------- Router parse ---------- */
-function parseRoute() {
-  const h = location.hash || "";
-  const m = h.match(/^#\/projeto\/([\w-]+)/);
-  if (m) return { view: "project", id: m[1] };
-  return { view: "home" };
-}
-
-function App() {
-  const [booted, setBooted] = useState(() => sessionStorage.getItem("cl_booted") === "1");
-  const [route, setRoute] = useState(parseRoute);
+/* page: { type: "home" | "project" | "recruiter" | "404", id?, hasEnglishCv? } */
+export function App({ page }) {
+  const home = page.type === "home";
+  // Server e primeira renderização do cliente coincidem (sem boot); o boot só aparece
+  // na primeira visita da sessão, depois da hidratação.
+  const [booted, setBooted] = useState(true);
   const [active, setActive] = useState("inicio");
-  const pendingScroll = useRef(null);
+
+  useEffect(() => {
+    let seen = false;
+    try { seen = sessionStorage.getItem("cl_booted") === "1"; } catch (e) { seen = true; }
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!seen && home && !reduce) setBooted(false);
+    document.documentElement.classList.remove("pre-boot");
+  }, []);
 
   // spotlight segue o mouse via transform (sem repintar a página)
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let raf = 0, x = 0, y = 0;
     const apply = () => {
       raf = 0;
@@ -73,17 +81,11 @@ function App() {
     return () => { window.removeEventListener("mousemove", onMove); if (raf) cancelAnimationFrame(raf); };
   }, []);
 
-  useEffect(() => {
-    const onHash = () => setRoute(parseRoute());
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
+  useReveal();
 
-  useReveal(route.view + booted);
-
-  // scroll spy on home (rect-based)
+  // scroll spy na home
   useEffect(() => {
-    if (route.view !== "home" || !booted) return;
+    if (!home || !booted) return;
     const ids = NAV.map((n) => n.id);
     let raf = 0;
     const check = () => {
@@ -100,55 +102,38 @@ function App() {
     check();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => { window.removeEventListener("scroll", onScroll); if (raf) cancelAnimationFrame(raf); };
-  }, [route.view, booted]);
+  }, [home, booted]);
 
-  // perform pending scroll after returning home
-  useEffect(() => {
-    if (route.view === "home" && pendingScroll.current) {
-      const id = pendingScroll.current;
-      pendingScroll.current = null;
-      requestAnimationFrame(() => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      });
-    }
-  }, [route.view]);
+  const finishBoot = () => {
+    try { sessionStorage.setItem("cl_booted", "1"); } catch (e) {}
+    setBooted(true);
+  };
 
-  const onNav = useCallback((id) => {
-    if (route.view !== "home") {
-      pendingScroll.current = id;
-      location.hash = "";
-    } else {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: id === "inicio" ? "smooth" : "smooth" });
-    }
-  }, [route.view]);
-
-  const onOpen = useCallback((pid) => { location.hash = "#/projeto/" + pid; }, []);
-
-  const finishBoot = () => { sessionStorage.setItem("cl_booted", "1"); setBooted(true); };
+  const navActive = home ? active : page.type === "recruiter" ? "recruiter" : page.type === "project" ? "projetos" : "";
 
   return (
     <React.Fragment>
       {!booted && <Boot onDone={finishBoot} />}
+      <SkipLink />
       <Cursor />
-      <Nav active={route.view === "home" ? active : "projetos"} onNav={onNav} />
-      {route.view === "project" ? (
-        <ProjectPage id={route.id} onNav={onNav} onOpen={onOpen} />
-      ) : (
-        <main className="app">
-          <div className="spot" aria-hidden="true" />
-          <Hero />
-          <About />
-          <Experience />
-          <Projects onOpen={onOpen} />
-          <Contact />
-        </main>
-      )}
-      <Footer onNav={onNav} />
+      <Nav active={navActive} home={home} />
+      <main id="conteudo" tabIndex={-1} className={home ? "app" : undefined}>
+        {home && (
+          <React.Fragment>
+            <div className="spot" aria-hidden="true" />
+            <Hero />
+            <About />
+            <Experience />
+            <Projects />
+            <Contact />
+          </React.Fragment>
+        )}
+        {page.type === "project" && <ProjectPage id={page.id} />}
+        {page.type === "recruiter" && <RecruiterPage hasEnglishCv={!!page.hasEnglishCv} />}
+        {page.type === "404" && <NotFound />}
+      </main>
+      <Footer home={home} />
       <div className="crt" aria-hidden="true" />
     </React.Fragment>
   );
 }
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);

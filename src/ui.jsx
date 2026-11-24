@@ -1,5 +1,4 @@
-/* global React */
-const { useState, useEffect, useRef, useCallback } = React;
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 /* ---------- Brand icon glyphs (simple monochrome SVG, currentColor) ---------- */
 const ICON_PATHS = {
@@ -13,7 +12,7 @@ const ICON_PATHS = {
     "M1.5 4.5h21A1.5 1.5 0 0124 6v12a1.5 1.5 0 01-1.5 1.5h-21A1.5 1.5 0 010 18V6a1.5 1.5 0 011.5-1.5zM12 13L2 6.8V18h20V6.8L12 13zM3.2 6L12 11.4 20.8 6H3.2z",
 };
 
-function Icon({ name, size = 18 }) {
+export function Icon({ name, size = 18 }) {
   const d = ICON_PATHS[name];
   if (!d) return null;
   return (
@@ -24,7 +23,7 @@ function Icon({ name, size = 18 }) {
 }
 
 /* ---------- Social buttons (pixel-framed) ---------- */
-function SocialRow({ links, compact }) {
+export function SocialRow({ links, compact }) {
   return (
     <div className={"social" + (compact ? " social--c" : "")}>
       {links.map((l) => (
@@ -33,7 +32,7 @@ function SocialRow({ links, compact }) {
           className="social__btn"
           href={l.href}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           data-cursor="link"
           aria-label={l.lbl}
           title={l.lbl}
@@ -47,7 +46,7 @@ function SocialRow({ links, compact }) {
 }
 
 /* ---------- Glitch text ---------- */
-function Glitch({ children, tag = "span", className = "" }) {
+export function Glitch({ children, tag = "span", className = "" }) {
   const Tag = tag;
   return (
     <Tag className={"glitch " + className} data-text={typeof children === "string" ? children : ""}>
@@ -57,7 +56,7 @@ function Glitch({ children, tag = "span", className = "" }) {
 }
 
 /* ---------- Procedural dither canvas ---------- */
-function Dither({ seed = 1, mode = "noise", cols = 140, rows = 56, theme, className, style }) {
+export function Dither({ seed = 1, mode = "noise", cols = 140, rows = 56, theme, className, style }) {
   const ref = useRef(null);
   useEffect(() => {
     if (ref.current && window.renderDither) {
@@ -68,7 +67,7 @@ function Dither({ seed = 1, mode = "noise", cols = 140, rows = 56, theme, classN
 }
 
 /* ---------- Real image dithered into theme palette ---------- */
-function DitherImage({ src, cols = 150, contrast, bias, theme, className, style }) {
+export function DitherImage({ src, cols = 150, contrast, bias, theme, className, style }) {
   const ref = useRef(null);
   const imgRef = useRef(null);
   useEffect(() => {
@@ -91,10 +90,13 @@ function DitherImage({ src, cols = 150, contrast, bias, theme, className, style 
   return <canvas ref={ref} className={"dither " + (className || "")} style={style} aria-hidden="true" />;
 }
 
-/* ---------- Typewriter ---------- */
-function Typewriter({ text, speed = 38, className }) {
-  const [n, setN] = useState(0);
+/* ---------- Typewriter ----------
+   O texto completo é renderizado no HTML (indexável e legível sem JS). Depois da
+   hidratação o efeito de digitação reinicia — exceto para quem prefere menos movimento. */
+export function Typewriter({ text, speed = 38, className }) {
+  const [n, setN] = useState(text.length);
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     setN(0);
     let i = 0;
     const id = setInterval(() => {
@@ -107,13 +109,13 @@ function Typewriter({ text, speed = 38, className }) {
   return (
     <span className={className}>
       {text.slice(0, n)}
-      <span className="tw-caret">▮</span>
+      <span className="tw-caret" aria-hidden="true">▮</span>
     </span>
   );
 }
 
 /* ---------- Live "wired" clock HUD ---------- */
-function ClockHUD() {
+export function ClockHUD() {
   const [t, setT] = useState("");
   useEffect(() => {
     const fmt = () => {
@@ -133,7 +135,7 @@ function ClockHUD() {
 }
 
 /* ---------- Magnetic hover wrapper ---------- */
-function Magnetic({ children, strength = 0.3, className, ...rest }) {
+export function Magnetic({ children, strength = 0.3, className, ...rest }) {
   const ref = useRef(null);
   const onMove = useCallback((e) => {
     const el = ref.current;
@@ -154,7 +156,7 @@ function Magnetic({ children, strength = 0.3, className, ...rest }) {
 }
 
 /* ---------- Reveal-on-scroll hook (rect-based, robust without IntersectionObserver) ---------- */
-function useReveal() {
+export function useReveal() {
   useEffect(() => {
     let raf = 0;
     const check = () => {
@@ -179,6 +181,4 @@ function useReveal() {
   });
 }
 
-Object.assign(window, {
-  Icon, SocialRow, Glitch, Dither, DitherImage, Typewriter, ClockHUD, Magnetic, useReveal,
-});
+

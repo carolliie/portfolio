@@ -1,33 +1,53 @@
 /* Portfolio content — pulled from CV + project briefs */
 
-const PROFILE = {
+import imageMeta from "./image-meta.json";
+
+/* ---------- Configuração do site ----------
+   SITE_URL pode ser sobrescrita no build: SITE_URL=https://meudominio.dev npm run build */
+export const SITE = {
+  name: "Ana Caroline Vieira — Portfólio",
+  shortName: "carollie",
+  url: (typeof process !== "undefined" && process.env && process.env.SITE_URL) || "https://carollie.netlify.app",
+  lang: "pt-BR",
+  locale: "pt_BR",
+  themeColor: "#0b0608",
+};
+
+/* Currículos. O PDF em inglês só é publicado/linkado se o arquivo existir em uploads/ (ver scripts/build.mjs). */
+export const CV = {
+  pt: { href: "/uploads/CURRICULO_ANA_CAROLINE_VIEIRA.pdf", file: "CURRICULO_ANA_CAROLINE_VIEIRA.pdf", lang: "pt-BR", label: "Currículo em português (PDF)" },
+  en: { href: "/uploads/RESUME_ANA_CAROLINE_VIEIRA_EN.pdf", file: "RESUME_ANA_CAROLINE_VIEIRA_EN.pdf", lang: "en", label: "Resume in English (PDF)" },
+};
+
+export const PROFILE = {
   name: "ana caroline vieira",
   fullName: "Ana Caroline Monteiro Vieira Pinto",
   role: "Software Engineer",
+  roleCv: "Desenvolvedora de Software Jr. (Full Stack / Back-end)",
   location: "Santarém · Pará · BR",
   tagline: "construindo sistemas e apps escaláveis, plataformas SaaS, sistemas distribuídos, integrações, IA & automações.",
   email: "anacvieira1415@gmail.com",
   phone: "+55 (93) 99124-9533",
 };
 
-const LINKS = [
+export const LINKS = [
   { id: "github", lbl: "github", val: "carolliie", href: "https://github.com/carolliie" },
   { id: "linkedin", lbl: "linkedin", val: "carolliie", href: "https://linkedin.com/in/carolliie" },
   { id: "instagram", lbl: "instagram", val: "@carollie.dev", href: "https://instagram.com/carollie.dev" },
   { id: "email", lbl: "email", val: "anacvieira1415@gmail.com", href: "mailto:anacvieira1415@gmail.com" },
 ];
 
-const STACK = [
+export const STACK = [
   "TypeScript", "JavaScript", "React", "Next.js", "Node.js",
   "Java", "Spring Boot", "PostgreSQL", "REST APIs", "Git", "Linux", "Docker", "Kanban",
 ];
 
-const EXPERIENCE = [
+export const EXPERIENCE = [
   {
     id: "zum",
     company: "Zum Telecom",
     role: "Desenvolvedora de Software",
-    period: "mai/2026 — atual",
+    period: "mai/2026 — set/2026",
     now: true,
     summary: "Sistemas para provedores de internet — ISP, ERP e CRM.",
     bullets: [
@@ -67,14 +87,14 @@ const EXPERIENCE = [
   },
 ];
 
-const EDUCATION = {
+export const EDUCATION = {
   school: "Universidade Federal do Oeste do Pará — UFOPA",
   degree: "Bacharelado em Ciência da Computação",
   period: "2023 — atual",
   focus: "Arquitetura de computadores, Algoritmos, Engenharia de Software e IA",
 };
 
-const STACK_ICONS = {
+export const STACK_ICONS = {
   TypeScript: "typescript",
   JavaScript: "javascript",
   React: "react",
@@ -91,9 +111,9 @@ const STACK_ICONS = {
   Zapier: "zapier",
   Grafana: "grafana",
   "Google Cloud": "googlecloud",
-  "React Native": "reactnative",
   Flutter: "flutter",
   Docker: "docker",
+  HTML: "html5",
   PHP: "php",
   Laravel: "laravel",
   CSS: "css",
@@ -104,7 +124,7 @@ const STACK_ICONS = {
 };
 
 
-const PROJECTS = [
+const RAW_PROJECTS = [
   {
     id: "antichurn",
     name: "Antichurn",
@@ -267,7 +287,7 @@ const PROJECTS = [
     image: "./screenshots/equilibrium.webp",
     kind: "website · edtech · institucional",
     seed: 5.6,
-    year: 2024,
+    year: "2024",
     tagline:
       "Plataforma educacional com cursos, inscrições e conteúdo institucional.",
     overview:
@@ -293,7 +313,7 @@ const PROJECTS = [
     image: "./screenshots/gapstudio.webp",
     kind: "website · design · portfolio",
     seed: 7.1,
-    year: 2026,
+    year: "2026",
     tagline:
       "Portfólio digital para um estúdio de design e comunicação visual.",
     overview:
@@ -318,7 +338,7 @@ const PROJECTS = [
     image: "./screenshots/tapajosskateshop.webp",
     kind: "e-commerce · retail · streetwear",
     seed: 9.4,
-    year: 2023,
+    year: "2023",
     tagline:
       "E-commerce de skate e streetwear com catálogo, carrinho e checkout.",
     overview:
@@ -351,7 +371,7 @@ const PROJECTS = [
     image: "./screenshots/estruturaimoveis.webp",
     kind: "website · real estate · catálogo",
     seed: 11.3,
-    year: 2023,
+    year: "2023",
     tagline:
       "Portal imobiliário com catálogo dinâmico e filtros de busca.",
     overview:
@@ -382,4 +402,110 @@ const PROJECTS = [
 ];
 
 
-Object.assign(window, { PROFILE, LINKS, STACK, EXPERIENCE, EDUCATION, PROJECTS, STACK_ICONS });
+
+
+/* ---------- Metadados SEO e resultados por projeto ----------
+   Resultados (`results`) usam somente números já publicados no conteúdo do projeto. */
+const PROJECT_EXTRA = {
+  antichurn: {
+    title: "Antichurn — SaaS de prevenção de churn para ISPs",
+    seo: "Antichurn: plataforma SaaS de prevenção de churn para provedores de internet, com 18 indicadores de risco e mais de 23 mil clientes monitorados.",
+    results: [
+      { value: "23.308+", label: "clientes monitorados em bases ativas" },
+      { value: "18", label: "indicadores de risco de churn" },
+    ],
+  },
+  agnelle: {
+    title: "Agnelle — e-commerce full-stack com Next.js",
+    seo: "Agnelle: e-commerce full-stack com catálogo, carrinho, checkout com Stripe e painel administrativo, em Next.js, Node.js e PostgreSQL.",
+  },
+  maisindica: {
+    title: "Mais Indica — SaaS de gestão de indicações",
+    seo: "Mais Indica: plataforma SaaS de indicações e recompensas — 283 leads, 211 conversões e cerca de R$ 23 mil em receita registrada em uma operação.",
+    results: [
+      { value: "283", label: "leads registrados em uma operação" },
+      { value: "211", label: "conversões" },
+      { value: "74,6%", label: "taxa de conversão" },
+      { value: "≈ R$ 23 mil", label: "em receita registrada" },
+    ],
+  },
+  cloudpet: {
+    title: "Cloudpet — app de saúde animal com IA e OCR",
+    seo: "Cloudpet: app mobile em Flutter para saúde animal, com OCR e IA para digitalizar carteirinhas de vacinação, para tutores e veterinários.",
+  },
+  casadocamarao: {
+    title: "Casa do Camarão — website institucional",
+    seo: "Casa do Camarão: website institucional e comercial de uma empresa de pescados regionais de Santarém (PA), em WordPress e Elementor.",
+  },
+  equilibrium: {
+    title: "Equilibrium Vestibulares — site educacional",
+    seo: "Equilibrium Vestibulares: site educacional com cursos, professores, aprovados, bolsas e blog para preparação ao ENEM em Santarém (PA).",
+  },
+  gapstudio: {
+    title: "Gap Studio — portfólio de estúdio de design",
+    seo: "Gap Studio: website institucional e portfólio de um estúdio de design e comunicação visual, com integração ao WhatsApp para orçamentos.",
+  },
+  tapajosskateshop: {
+    title: "Tapajós Skate Shop — e-commerce de skate",
+    seo: "Tapajós Skate Shop: e-commerce de skate e streetwear em WordPress e WooCommerce, com catálogo por marcas, carrinho e checkout.",
+  },
+  estruturaimoveis: {
+    title: "Estrutura Imóveis — portal imobiliário",
+    seo: "Estrutura Imóveis: portal imobiliário com catálogo dinâmico, filtros por localização, tipo e preço e páginas detalhadas dos imóveis.",
+  },
+};
+
+export const PROJECTS = RAW_PROJECTS.map((p) => {
+  const m = imageMeta[p.id] || {};
+  const x = PROJECT_EXTRA[p.id] || {};
+  return {
+    ...p,
+    year: String(p.year),
+    image640: p.image ? p.image.replace(".webp", "-640.webp").replace("./", "/") : undefined,
+    image: p.image ? p.image.replace("./", "/") : undefined,
+    imageW: m.w, imageH: m.h, imageW640: m.w640, imageH640: m.h640,
+    seoTitle: x.title || p.name,
+    seoDescription: x.seo || p.tagline,
+    results: x.results || [],
+  };
+});
+
+/* ---------- Dados adicionais do currículo (versão /recruiter) ----------
+   Fonte: uploads/CURRICULO_ANA_CAROLINE_VIEIRA.pdf */
+export const RECRUITER = {
+  headline: "Desenvolvedora de Software Jr. (Full Stack / Back-end)",
+  summaryPt:
+    "Desenvolvedora de Software e graduanda em Ciência da Computação pela Universidade Federal do Oeste do Pará (UFOPA), com experiência em desenvolvimento de aplicações web, sistemas SaaS, integrações com APIs e ERPs, automação de processos e análise de dados. Atua no desenvolvimento e evolução de sistemas utilizados por provedores de internet, envolvendo backend, frontend, bancos de dados, integrações externas, regras de negócio e resolução de problemas em produção.",
+  summaryEn:
+    "Software developer and Computer Science student at the Federal University of Western Pará (UFOPA), Brazil, with experience building web applications and SaaS platforms, integrating APIs and ERP systems, automating processes and analysing data. Works on systems used by internet service providers, covering back end, front end, databases, third-party integrations, business rules and production troubleshooting. English level: intermediate.",
+  skills: [
+    { group: "Linguagens", items: ["Java", "JavaScript", "TypeScript", "SQL"] },
+    { group: "Frontend", items: ["React", "Next.js", "HTML", "CSS", "Tailwind CSS", "WordPress"] },
+    { group: "Backend", items: ["Node.js", "Express", "Java", "Spring Boot", "APIs REST"] },
+    { group: "Banco de dados", items: ["PostgreSQL", "MongoDB", "Modelagem relacional"] },
+    { group: "DevOps e cloud", items: ["Docker", "AWS", "Linux", "Git", "GitHub"] },
+    { group: "Engenharia de software", items: ["Arquitetura de software", "Engenharia de requisitos", "Orientação a objetos", "Integração de sistemas", "Documentação técnica", "Testes", "Debugging", "Análise de dados", "Metodologias ágeis"] },
+  ],
+  certifications: [
+    { name: "AWS Academy Graduate – Cloud Foundations", issuer: "Amazon Web Services" },
+    { name: "AWS Academy Cloud Architecting", issuer: "Amazon Web Services" },
+    { name: "Formação Aprenda a programar em Java com Orientação a Objetos", issuer: "Alura" },
+    { name: "Formação Java Web: crie aplicações usando Spring Boot", issuer: "Alura" },
+  ],
+  languages: [{ name: "Português", level: "Nativo" }, { name: "Inglês", level: "Intermediário" }],
+  /* Destaques do currículo, por experiência (id de EXPERIENCE) */
+  experienceHighlights: {
+    zum: [
+      "Integrações via API REST com ERPs de provedores de internet (IXC Soft e SGP): clientes, contratos, atendimentos, ordens de serviço e dados financeiros.",
+      "Regras de análise de comportamento e risco de clientes transformadas em indicadores de decisão — redução de 91% de trabalho manual (conforme currículo).",
+      "Investigação e correção de problemas de sincronização de dados, regras de negócio, APIs, banco de dados e jobs assíncronos.",
+      "Stack: React, Next.js, TypeScript, Node.js, PostgreSQL, Docker, Git e serviços de cloud.",
+    ],
+    lugenius: [
+      "Implementação de mais de 20 interfaces a partir de protótipos, com UI/UX, responsividade, acessibilidade e usabilidade.",
+    ],
+    ufopa: [
+      "Amazonibus: sistema web de gestão de requisições de transporte institucional da UFOPA, com React, TypeScript, Vite, Tailwind CSS e Axios; prototipagem no Figma.",
+    ],
+  },
+};

@@ -1,18 +1,23 @@
-/* global React, PROFILE, LINKS, STACK, EXPERIENCE, EDUCATION, PROJECTS, STACK_ICONS,
-   SocialRow, Glitch, Dither, DitherImage, Typewriter, ClockHUD, Magnetic, Icon */
-const { useState, useEffect, useRef } = React;
+import React, { useState, useEffect } from "react";
+import {
+  PROFILE, LINKS, STACK, EXPERIENCE, EDUCATION, PROJECTS, CV,
+} from "./data.js";
+import {
+  SocialRow, Glitch, Dither, DitherImage, Typewriter, Magnetic,
+} from "./ui.jsx";
+import { TechChips } from "./tech.jsx";
 
 /* ================= BOOT ================= */
 const BOOT_LINES = [
   "> conectando à wired . . .",
   "> protocolo: present day // present time",
   "> autenticando: ana_caroline.vieira",
-  "> host: carollie.dev @ santarém-pa",
+  "> host: carollie @ santarém-pa",
   "> camadas: [identidade][memória][rede]",
   "> [████████████████████] 100%",
   "> layer connected. você está aqui.",
 ];
-function Boot({ onDone }) {
+export function Boot({ onDone }) {
   const [shown, setShown] = useState(0);
   const [closing, setClosing] = useState(false);
   const finish = () => {
@@ -31,9 +36,18 @@ function Boot({ onDone }) {
     <div
       className={"boot crt-type" + (closing ? " boot--out" : "")}
       onClick={finish}
+      role="button"
+      tabIndex={0}
+      aria-label="Pular animação de entrada"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
+          e.preventDefault();
+          finish();
+        }
+      }}
     >
       <div className="boot__scan" />
-      <div className="boot__inner">
+      <div className="boot__inner" aria-hidden="true">
         {BOOT_LINES.slice(0, shown).map((l, i) => (
           <div className="boot__line" key={i}>
             {l}
@@ -41,39 +55,46 @@ function Boot({ onDone }) {
         ))}
         {shown < BOOT_LINES.length && <span className="boot__caret">▮</span>}
       </div>
-      <div className="boot__skip">[ clique para entrar ]</div>
+      <div className="boot__skip">[ clique ou pressione enter para entrar ]</div>
     </div>
   );
 }
 
 /* ================= NAV ================= */
-const NAV = [
+export const NAV = [
   { id: "inicio", lbl: "início" },
   { id: "sobre", lbl: "sobre" },
   { id: "experiencia", lbl: "experiência" },
   { id: "projetos", lbl: "projetos" },
   { id: "contato", lbl: "contato" },
 ];
-function Nav({ active, onNav }) {
+
+export function SkipLink() {
   return (
-    <nav className="nav crt-type">
-      <button
-        className="nav__brand"
-        onClick={() => onNav("inicio")}
-        data-cursor="link"
-      >
-        <span className="nav__brandmark">✶</span> carollie.dev
-      </button>
+    <a className="skip-link crt-type" href="#conteudo">
+      pular para o conteúdo
+    </a>
+  );
+}
+
+export function Nav({ active, home }) {
+  const href = (id) => (home ? "#" + id : "/#" + id);
+  return (
+    <nav className="nav crt-type" aria-label="Principal">
+      <a className="nav__brand" href="/" data-cursor="link">
+        <span className="nav__brandmark" aria-hidden="true">✶</span> carollie
+      </a>
       <div className="nav__links">
         {NAV.map((n) => (
-          <button
+          <a
             key={n.id}
+            href={href(n.id)}
             className={"nav__link" + (active === n.id ? " is-active" : "")}
-            onClick={() => onNav(n.id)}
+            aria-current={active === n.id ? "true" : undefined}
             data-cursor="link"
           >
             {n.lbl}
-          </button>
+          </a>
         ))}
       </div>
     </nav>
@@ -81,14 +102,14 @@ function Nav({ active, onNav }) {
 }
 
 /* ================= HERO ================= */
-function Hero() {
+export function Hero() {
   return (
     <header className="hero" id="inicio">
-      {/* floating pixel sprites */}
-      <span className="sprite sprite--1">✶</span>
-      <span className="sprite sprite--2">◆</span>
-      <span className="sprite sprite--3">+</span>
-      <span className="sprite sprite--4">▮</span>
+      {/* floating pixel sprites (decorativos) */}
+      <span className="sprite sprite--1" aria-hidden="true">✶</span>
+      <span className="sprite sprite--2" aria-hidden="true">◆</span>
+      <span className="sprite sprite--3" aria-hidden="true">+</span>
+      <span className="sprite sprite--4" aria-hidden="true">▮</span>
 
       <div className="hero__grid wrap">
         <span className="hero__tech hero__tech--2 crt-type" aria-hidden="true">
@@ -99,9 +120,12 @@ function Hero() {
         </span>
         <div className="hero__left">
           <div className="hero__tag crt-type reveal">
-            <span className="blink">●</span> conexão estabelecida — layer:01
+            <span className="blink" aria-hidden="true">●</span> conexão estabelecida — layer:01
           </div>
           <h1 className="hero__name">
+            <span className="sr-only">
+              Ana Caroline Vieira, Software Engineer. Frase do portfólio:{" "}
+            </span>
             <Glitch tag="span" className="hero__nameline">
               No matter where you are,
             </Glitch>
@@ -114,32 +138,12 @@ function Hero() {
           </p>
           <div className="hero__cta reveal">
             <Magnetic>
-              <a
-                className="btn btn--solid hero__start crt-type"
-                href="#/"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document
-                    .getElementById("projetos")
-                    .scrollIntoView({ behavior: "smooth" });
-                }}
-                data-cursor="link"
-              >
+              <a className="btn btn--solid hero__start crt-type" href="#projetos" data-cursor="link">
                 let's start!
               </a>
             </Magnetic>
             <Magnetic>
-              <a
-                className="btn btn--solid crt-type"
-                href="#/"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document
-                    .getElementById("projetos")
-                    .scrollIntoView({ behavior: "smooth" });
-                }}
-                data-cursor="link"
-              >
+              <a className="btn btn--solid crt-type" href="#projetos" data-cursor="link">
                 ver projetos →
               </a>
             </Magnetic>
@@ -150,55 +154,54 @@ function Hero() {
         <div className="hero__aside reveal">
           <span className="hero__asidek crt-type">portfolio / 2026</span>
           <p>
-            Software, interfaces web, automações e plataformas digitais com foco
-            em clareza, escala e presença visual.
+            <strong>Ana Caroline Vieira</strong> — {PROFILE.role}. Software,
+            interfaces web, automações e plataformas digitais com foco em
+            clareza, escala e presença visual.
           </p>
           <div className="hero__facts crt-type">
             <span>{PROFILE.location}</span>
-            <span>{PROFILE.domain}</span>
           </div>
         </div>
       </div>
-      <button
-        className="hero__scroll crt-type"
-        onClick={() =>
-          document
-            .getElementById("sobre")
-            .scrollIntoView({ behavior: "smooth" })
-        }
-        data-cursor="link"
-      >
-        scroll ↓
-      </button>
+      <a className="hero__scroll crt-type" href="#sobre" data-cursor="link" aria-label="Rolar para a seção sobre">
+        <span aria-hidden="true">scroll ↓</span>
+      </a>
     </header>
   );
 }
 
 /* ================= ABOUT ================= */
-function About() {
+export function About() {
   const [hover, setHover] = useState(false);
   return (
-    <section className="sec wrap" id="sobre">
-      <Bar n="01">sobre</Bar>
+    <section className="sec wrap" id="sobre" aria-labelledby="sobre-t">
+      <Bar n="01" id="sobre-t">sobre</Bar>
       <div className="about">
         <div
           className="about__photo reveal"
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
+          onFocus={() => setHover(true)}
+          onBlur={() => setHover(false)}
+          tabIndex={0}
           data-cursor="view"
         >
           <DitherImage
-            src="assets/ana-photo.jpeg"
+            src="/assets/ana-photo.webp"
             cols={150}
             contrast={1.2}
             className="about__dither"
           />
           <img
-            src="assets/ana-photo.jpeg"
-            alt="Ana Caroline Vieira"
+            src="/assets/ana-photo.webp"
+            alt="Retrato de Ana Caroline Vieira"
+            width="854"
+            height="1280"
+            loading="lazy"
+            decoding="async"
             className={"about__real" + (hover ? " is-on" : "")}
           />
-          <span className="about__photolbl crt-type">decode: hover</span>
+          <span className="about__photolbl crt-type" aria-hidden="true">decode: hover</span>
         </div>
 
         <div className="about__body">
@@ -240,68 +243,21 @@ function About() {
 
           <div className="stack reveal">
             <span className="stack__lbl crt-type">stack</span>
-            <div className="stack__chips">
-              {STACK.map((s) => (
-                <span className="chip techchip" key={s} title={s} aria-label={s}>
-                  <img
-                    src={`https://cdn.simpleicons.org/${STACK_ICONS[s] || "codepen"}/ef9bb6`}
-                    alt=""
-                    aria-hidden="true"
-                  />
-                </span>
-              ))}
-            </div>
+            <TechChips items={STACK} />
           </div>
 
           <div className="about__actions reveal">
             <Magnetic>
               <a
                 className="btn btn--ghost crt-type"
-                href="https://carollie.netlify.app/uploads/CURRICULO_ANA_CAROLINE_VIEIRA.pdf"
+                href={CV.pt.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor="link"
               >
-                ver currículo →
+                ver currículo (pdf) →
               </a>
             </Magnetic>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function AboutStackOnly() {
-  return (
-    <section className="sec wrap" id="sobre">
-      <Bar n="01">sobre</Bar>
-      <div className="about">
-        <div className="about__body">
-          <div className="about__meta reveal">
-            <div className="metacard metacard--education">
-              <span className="metacard__k crt-type">formacao</span>
-              <span className="metacard__v">{EDUCATION.degree}</span>
-              <span className="metacard__sub crt-type">
-                {EDUCATION.school} · {EDUCATION.period}
-              </span>
-              <p className="metacard__focus">{EDUCATION.focus}</p>
-            </div>
-          </div>
-
-          <div className="stack reveal">
-            <span className="stack__lbl crt-type">stacks</span>
-            <div className="stack__chips">
-              {STACK.map((s) => (
-                <span className="chip techchip" key={s} title={s} aria-label={s}>
-                  <img
-                    src={`https://cdn.simpleicons.org/${STACK_ICONS[s] || "codepen"}/ef9bb6`}
-                    alt=""
-                    aria-hidden="true"
-                  />
-                </span>
-              ))}
-            </div>
           </div>
         </div>
       </div>
@@ -312,49 +268,55 @@ function AboutStackOnly() {
 /* ================= EXPERIENCE ================= */
 function ExpItem({ x, i }) {
   const [open, setOpen] = useState(i === 0);
+  const panel = "exp-" + x.id;
   return (
     <div className={"exp" + (open ? " is-open" : "")}>
-      <div className="exp__rail">
+      <div className="exp__rail" aria-hidden="true">
         <span className={"exp__dot" + (x.now ? " exp__dot--now" : "")} />
       </div>
       <div className="exp__card reveal">
-        <button
-          className="exp__head"
-          onClick={() => setOpen((o) => !o)}
-          data-cursor="link"
-        >
-          <div>
-            <span className="exp__period crt-type">{x.period}</span>
-            <h3 className="exp__company">{x.company}</h3>
-            <span className="exp__role">{x.role}</span>
-          </div>
-          <span className="exp__toggle crt-type">{open ? "−" : "+"}</span>
-        </button>
+        <h3 className="exp__h">
+          <button
+            type="button"
+            className="exp__head"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls={panel}
+            data-cursor="link"
+          >
+            <span>
+              <span className="exp__period crt-type">{x.period}</span>
+              <span className="exp__company">{x.company}</span>
+              <span className="exp__role">{x.role}</span>
+            </span>
+            <span className="exp__toggle crt-type" aria-hidden="true">{open ? "−" : "+"}</span>
+          </button>
+        </h3>
         <p className="exp__summary">{x.summary}</p>
-        <div className="exp__detail">
-          <div className="exp__detail-in">
+        <div className="exp__detail" id={panel} role="region" aria-label={`Detalhes — ${x.company}`}>
+          <div className="exp__detail-in" aria-hidden={open ? undefined : "true"}>
             <ul className="exp__bullets">
               {x.bullets.map((b, k) => (
                 <li key={k}>{b}</li>
               ))}
             </ul>
-            <div className="exp__tags">
+            <ul className="exp__tags" aria-label="Tecnologias e áreas">
               {x.tags.map((t) => (
-                <span className="tag crt-type" key={t}>
+                <li className="tag crt-type" key={t}>
                   {t}
-                </span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </div>
       </div>
     </div>
   );
 }
-function Experience() {
+export function Experience() {
   return (
-    <section className="sec wrap" id="experiencia">
-      <Bar n="02">experiência</Bar>
+    <section className="sec wrap" id="experiencia" aria-labelledby="experiencia-t">
+      <Bar n="02" id="experiencia-t">experiência</Bar>
       <div className="explist">
         {EXPERIENCE.map((x, i) => (
           <ExpItem x={x} i={i} key={x.id} />
@@ -365,20 +327,28 @@ function Experience() {
 }
 
 /* ================= PROJECTS ================= */
-function ProjectCard({ p, onOpen }) {
+function ProjectCard({ p }) {
   return (
     <a
       className="card reveal"
-      href={"#/projeto/" + p.id}
-      onClick={(e) => {
-        e.preventDefault();
-        onOpen(p.id);
-      }}
+      href={"/projetos/" + p.id + "/"}
       data-cursor="view"
     >
       <div className="card__cover">
         {p.image
-          ? <img src={p.image} alt={p.name} className="card__img" />
+          ? (
+            <img
+              src={p.image640}
+              srcSet={`${p.image640} 640w, ${p.image} 1200w`}
+              sizes="(max-width: 700px) 90vw, 380px"
+              alt={`Captura de tela do projeto ${p.name}`}
+              width={p.imageW640}
+              height={p.imageH640}
+              loading="lazy"
+              decoding="async"
+              className="card__img"
+            />
+          )
           : <Dither mode="noise" seed={p.seed} cols={120} rows={84} />
         }
         <span className="card__kind crt-type">{p.kind}</span>
@@ -387,18 +357,20 @@ function ProjectCard({ p, onOpen }) {
       <div className="card__body">
         <h3 className="card__name">{p.name}</h3>
         <p className="card__tag">{p.tagline}</p>
-        <span className="card__open crt-type">abrir página ↗</span>
+        <span className="card__open crt-type">
+          abrir página <span className="sr-only">do projeto {p.name}</span>↗
+        </span>
       </div>
     </a>
   );
 }
-function Projects({ onOpen }) {
+export function Projects() {
   return (
-    <section className="sec wrap" id="projetos">
-      <Bar n="03">projetos</Bar>
+    <section className="sec wrap" id="projetos" aria-labelledby="projetos-t">
+      <Bar n="03" id="projetos-t">projetos</Bar>
       <div className="grid">
         {PROJECTS.map((p) => (
-          <ProjectCard key={p.id} p={p} onOpen={onOpen} />
+          <ProjectCard key={p.id} p={p} />
         ))}
       </div>
     </section>
@@ -406,10 +378,10 @@ function Projects({ onOpen }) {
 }
 
 /* ================= CONTACT ================= */
-function Contact() {
+export function Contact() {
   return (
-    <section className="sec wrap" id="contato">
-      <Bar n="04">contato</Bar>
+    <section className="sec wrap" id="contato" aria-labelledby="contato-t">
+      <Bar n="04" id="contato-t">contato</Bar>
       <div className="contact">
         <div className="contact__left">
           <p className="contact__lead">contact me through the wired:</p>
@@ -420,11 +392,11 @@ function Contact() {
           >
             <label>
               <span className="crt-type">nome</span>
-              <input name="name" type="text" placeholder="seu nome" required />
+              <input name="name" type="text" placeholder="seu nome" autoComplete="name" required />
             </label>
             <label>
               <span className="crt-type">email</span>
-              <input name="email" type="email" placeholder="seu email" required />
+              <input name="email" type="email" placeholder="seu email" autoComplete="email" required />
             </label>
             <label>
               <span className="crt-type">mensagem</span>
@@ -447,8 +419,12 @@ function Contact() {
         </div>
         <div className="contact__right">
           <img
-            src="assets/striped-face-transparent.gif"
+            src="/assets/striped-face-transparent.webp"
             alt=""
+            width="360"
+            height="360"
+            loading="lazy"
+            decoding="async"
             className="contact__art"
           />
         </div>
@@ -458,42 +434,25 @@ function Contact() {
 }
 
 /* ================= FOOTER ================= */
-function Footer({ onNav }) {
+export function Footer({ home }) {
   return (
     <footer className="footer wrap crt-type">
-      <span>carollie.dev</span>
-      <button
-        className="footer__top"
-        onClick={() => onNav("inicio")}
-        data-cursor="link"
-      >
+      <span>carollie</span>
+      <a className="footer__top" href={home ? "#inicio" : "#conteudo"} data-cursor="link" aria-label="Voltar ao topo">
         ↑
-      </button>
+      </a>
       <span className="muted">present day. present time.</span>
     </footer>
   );
 }
 
 /* ================= SECTION BAR ================= */
-function Bar({ children, n }) {
+export function Bar({ children, n, id }) {
   return (
     <div className="bar reveal">
-      {n && <span className="bar__n crt-type">{n} //</span>}
-      <h2 className="bar__t">{children}</h2>
-      <span className="bar__rule" />
+      {n && <span className="bar__n crt-type" aria-hidden="true">{n} //</span>}
+      <h2 className="bar__t" id={id}>{children}</h2>
+      <span className="bar__rule" aria-hidden="true" />
     </div>
   );
 }
-
-Object.assign(window, {
-  Boot,
-  Nav,
-  Hero,
-  About,
-  Experience,
-  Projects,
-  Contact,
-  Footer,
-  Bar,
-  NAV,
-});
